@@ -5,31 +5,33 @@ def tem_msg ():
 	return len(mensagens) > 0
 
 def envia ():
-	global mensagens, alunos
+	global mensagens, pacientes
 	while True:
 		print (mensagens)
 		with cv:
 			cv.wait ()
 
-		print ("Enviando Mensagens...")
+		print ("Enviando nomes do pacientes...")
 
 		with mutex:
 			for m in mensagens:
 				print ("Enviando "+m[1].decode("utf-8")+"...")
 				for c in conexoes:
 					if not (c is None):
-						if m[0][0] in alunos:
-							al = alunos[m[0][0]]
+						if m[1].decode("utf-8") is 'L':
+							break;
+						if m[0][0] in pacientes:
+							al = pacientes[m[0][0]]
 						else:
 							al = m[0]
-						minhastr = "[" + str(al) + "]: " + m[1].decode("utf-8")
-						c[0].send (str.encode(minhastr, "utf-8"))
+						paciente = "User:" + str(al) + " L:" + m[1].decode("utf-8")
+						c[0].send (str.encode(paciente, "utf-8"))
 			mensagens = []
 			
 def atende (conn, cliente, ident):
 	global conexoes
 	data = conn.recv (4096)
-	alunos[cliente] = data.decode()
+	pacientes[cliente[0]] = data.decode()
 	while True:
 		try:
 			data = conn.recv (4096)
@@ -59,11 +61,11 @@ def atende (conn, cliente, ident):
 s = socket ()
 
 host = "0.0.0.0"
-porta = 8752
+porta = 8792
 s.bind ((host, porta))
 s.listen (10)
 nthr = 0
-alunos = {}
+pacientes = {}
 
 mutex = threading.Lock ()
 mutex2 = threading.Lock ()

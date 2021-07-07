@@ -29,7 +29,7 @@ def envia ():
 def atende (conn, cliente, ident):
 	global conexoes
 	data = conn.recv (4096)
-	alunos[cliente] = data.decode()
+	alunos[cliente[0]] = data.decode()
 	while True:
 		try:
 			data = conn.recv (4096)
@@ -37,8 +37,8 @@ def atende (conn, cliente, ident):
 			break;
 
 		if not data or len(data) == 0:
-			break
-
+			break;
+		
 		print (str(cliente)+" me mandou "+data.decode("utf-8") )
 
 		with mutex:
@@ -59,7 +59,7 @@ def atende (conn, cliente, ident):
 s = socket ()
 
 host = "0.0.0.0"
-porta = 8752
+porta = 8729
 s.bind ((host, porta))
 s.listen (10)
 nthr = 0

@@ -1,6 +1,22 @@
 from socket import *
 import threading
 
+def is_cpf_valido(cpf: str) -> bool:
+    if len(cpf) != TAMANHO_CPF:
+        return False
+
+    if cpf in (c * TAMANHO_CPF for c in "1234567890"):
+        return False
+
+    cpf_reverso = cpf[::-1]
+    for i in range(2, 0, -1):
+        cpf_enumerado = enumerate(cpf_reverso[i:], start=2)
+        dv_calculado = sum(map(lambda x: int(x[1]) * x[0], cpf_enumerado)) * 10 % 11
+        if cpf_reverso[i - 1:i] != str(dv_calculado % 10):
+            return False
+
+    return True
+
 def tem_msg ():
 	return len(mensagens) > 0
 
@@ -29,7 +45,7 @@ def envia ():
 def atende (conn, cliente, ident):
 	global conexoes
 	data = conn.recv (4096)
-	alunos[cliente] = data.decode()
+	alunos[cliente[0]] = data.decode()
 	while True:
 		try:
 			data = conn.recv (4096)
@@ -59,7 +75,7 @@ def atende (conn, cliente, ident):
 s = socket ()
 
 host = "0.0.0.0"
-porta = 8752
+porta = 8729
 s.bind ((host, porta))
 s.listen (10)
 nthr = 0

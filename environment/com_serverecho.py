@@ -16,7 +16,7 @@ def trata_conn (conn, cliente):
 
 s = socket()
 
-s.bind(("0.0.0.0", 8753))
+s.bind(("0.0.0.0", 8752))
 s.listen()
 
 print("Servidor no ar...")

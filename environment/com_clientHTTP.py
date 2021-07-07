@@ -2,7 +2,7 @@ from socket import *
 
 s = socket()
 
-sevidor = "g1.globo.com"
+servidor = "g1.globo.com"
 porta = 88
 
 s.connect((servidor,porta))
